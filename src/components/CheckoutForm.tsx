@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useStore } from '@nanostores/react';
-import { motion } from 'framer-motion';
 import { $lang, $cart, $cartTotal, clearCart } from '../store';
 import { translations } from '../data/i18n';
 import { cookies } from '../data/cookies';
@@ -82,48 +81,14 @@ export default function CheckoutForm() {
   const [time,    setTime]    = useState('');
   const [note,    setNote]    = useState('');
   const [errors,  setErrors]  = useState<Record<string, string>>({});
-  const [done,    setDone]    = useState(false);
 
-  if (cart.length === 0 && !done) {
+  if (cart.length === 0) {
     return (
       <div className="text-center py-20">
         <p className="text-5xl mb-4">🛒</p>
         <p className="font-semibold text-chocolate-700 mb-4">{T.emptyCart}</p>
         <a href="/menu" className="btn-primary">{T.goToMenu}</a>
       </div>
-    );
-  }
-
-  if (done) {
-    const dateLabel = date
-      ? new Date(date + 'T12:00:00').toLocaleDateString(
-          lang === 'he' ? 'he-IL' : lang === 'ar' ? 'ar-EG' : 'en-US',
-          { weekday: 'long', month: 'long', day: 'numeric' }
-        )
-      : '';
-
-    return (
-      <motion.div
-        className="text-center py-20"
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-      >
-        <motion.div
-          className="text-7xl mb-5"
-          animate={{ rotate: [0, -10, 10, -10, 10, 0] }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          💬
-        </motion.div>
-        <h2 className="font-display text-3xl font-bold text-chocolate-900 mb-3">{T.successTitle}</h2>
-        <p className="text-chocolate-500 max-w-sm mx-auto mb-3">{T.successMsg}</p>
-        {dateLabel && (
-          <p className="text-sm text-chocolate-400 mb-8">
-            {T.successDate.replace('{date}', `${dateLabel}${time ? ` @ ${time}` : ''}`)}
-          </p>
-        )}
-        <a href="/" className="btn-primary">{T.backHome}</a>
-      </motion.div>
     );
   }
 
@@ -141,11 +106,13 @@ export default function CheckoutForm() {
     if (!validate()) return;
 
     const msg = buildWhatsAppMessage(lang, name, address, date, time, note, cart, total);
-    const url  = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 
-    window.open(url, '_blank', 'noopener,noreferrer');
+    // Clear cart before navigating so it's clean if user returns
     clearCart();
-    setDone(true);
+
+    // window.location.assign is a direct navigation — never blocked by popup blockers
+    window.location.assign(url);
   };
 
   return (
