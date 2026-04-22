@@ -1,0 +1,17 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CheckoutForm from '../components/CheckoutForm';
+---
+
+<Layout title="Checkout — Mom's Cookies">
+  <div class="pt-28 pb-16 px-6 min-h-screen">
+    <div class="max-w-5xl mx-auto">
+      <div class="mb-10">
+        <p class="section-subtitle mb-2">Almost There</p>
+        <h1 class="section-title">Checkout</h1>
+        <p class="text-chocolate-500 mt-2 text-sm">Review your order and enter delivery details.</p>
+      </div>
+      <CheckoutForm client:load />
+    </div>
+  </div>
+</Layout>

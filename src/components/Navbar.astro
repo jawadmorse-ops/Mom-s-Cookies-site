@@ -1,0 +1,84 @@
+---
+const navLinks = [
+  { href: '/',       label: 'Home'  },
+  { href: '/menu',   label: 'Menu'  },
+  { href: '/order',  label: 'Order' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="fixed top-0 left-0 right-0 z-50 bg-cream-50/90 backdrop-blur-md border-b border-cream-200">
+  <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+    <!-- Logo -->
+    <a href="/" class="flex items-center gap-2 group">
+      <span class="text-2xl">🍪</span>
+      <span class="font-display font-bold text-xl text-chocolate-900 group-hover:text-cookie-600 transition-colors">
+        Crumble & Co.
+      </span>
+    </a>
+
+    <!-- Desktop Nav -->
+    <ul class="hidden md:flex items-center gap-1">
+      {navLinks.map(({ href, label }) => (
+        <li>
+          <a
+            href={href}
+            class={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
+              currentPath === href
+                ? 'bg-cookie-600 text-white'
+                : 'text-chocolate-700 hover:bg-cream-200 hover:text-cookie-700'
+            }`}
+          >
+            {label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <!-- CTA -->
+    <a href="/order" class="hidden md:inline-flex btn-primary text-sm py-2">
+      Order Now
+    </a>
+
+    <!-- Mobile menu button -->
+    <button
+      id="mobile-menu-btn"
+      class="md:hidden p-2 rounded-lg hover:bg-cream-200 transition-colors"
+      aria-label="Toggle menu"
+    >
+      <svg class="w-5 h-5 text-chocolate-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="md:hidden hidden border-t border-cream-200 bg-cream-50 px-6 py-4">
+    <ul class="flex flex-col gap-2">
+      {navLinks.map(({ href, label }) => (
+        <li>
+          <a
+            href={href}
+            class={`block px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
+              currentPath === href
+                ? 'bg-cookie-600 text-white'
+                : 'text-chocolate-700 hover:bg-cream-200'
+            }`}
+          >
+            {label}
+          </a>
+        </li>
+      ))}
+      <li class="pt-2">
+        <a href="/order" class="btn-primary w-full justify-center text-sm py-2">Order Now</a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<script>
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  btn?.addEventListener('click', () => menu?.classList.toggle('hidden'));
+</script>

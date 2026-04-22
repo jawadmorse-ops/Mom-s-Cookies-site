@@ -1,0 +1,27 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HeroSection from '../components/HeroSection';
+import BundleDeals from '../components/BundleDeals';
+import WhyUsSection from '../components/WhyUsSection';
+import ReviewSection from '../components/ReviewSection';
+---
+
+<Layout>
+  <HeroSection client:load />
+  <BundleDeals client:visible />
+  <WhyUsSection client:visible />
+  <ReviewSection client:visible />
+
+  <!-- CTA Banner -->
+  <section class="py-20 px-6 bg-cookie-600 text-center">
+    <h2 class="font-display text-3xl md:text-4xl font-bold text-white mb-3">
+      Ready to Order?
+    </h2>
+    <p class="text-cookie-100 mb-8 max-w-sm mx-auto text-sm">
+      Mix any flavors, pick a bundle size, and we'll bake them fresh.
+    </p>
+    <a href="/menu" class="inline-flex items-center gap-2 bg-white text-cookie-700 font-bold px-8 py-3 rounded-full hover:bg-cream-100 transition-all shadow-lg active:scale-95">
+      Browse the Menu →
+    </a>
+  </section>
+</Layout>

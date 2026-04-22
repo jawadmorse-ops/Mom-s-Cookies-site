@@ -1,0 +1,45 @@
+---
+import '../styles/global.css';
+import CartDrawer from '../components/CartDrawer';
+import NavbarClient from '../components/NavbarClient';
+import FooterClient from '../components/FooterClient';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title       = "Mom's Cookies",
+  description = "Hand-crafted artisan cookies baked fresh daily. Browse and order online.",
+} = Astro.props;
+
+const currentPath = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <!-- Apply saved language/dir before React hydrates to prevent flash -->
+    <script>
+      try {
+        const lang = JSON.parse(localStorage.getItem('lang') ?? '"en"');
+        document.documentElement.lang = lang;
+        document.documentElement.dir = ['he', 'ar'].includes(lang) ? 'rtl' : 'ltr';
+      } catch (_) {}
+    </script>
+  </head>
+  <body>
+    <NavbarClient client:load currentPath={currentPath} />
+    <CartDrawer client:load />
+    <main>
+      <slot />
+    </main>
+    <FooterClient client:load />
+  </body>
+</html>

@@ -1,0 +1,1 @@
+- [Cookie Site Project](project_cookie_site.md) — Crumble & Co. stack (Astro 6 + Tailwind + Framer Motion), pages, key files, and conventions
