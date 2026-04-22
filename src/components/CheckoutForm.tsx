@@ -11,7 +11,7 @@ const WHATSAPP_NUMBER = '972506537666';
 function buildWhatsAppMessage(
   lang: Lang,
   name: string,
-  address: string,
+  phone: string,
   date: string,
   time: string,
   note: string,
@@ -31,8 +31,8 @@ function buildWhatsAppMessage(
   lines.push(`🍪 *New Order — Mom's Cookies*`);
   lines.push('');
   lines.push(`*Name:* ${name}`);
-  lines.push(`*Address:* ${address}`);
-  if (dateLabel) lines.push(`*Delivery:* ${dateLabel}${time ? ` @ ${time}` : ''}`);
+  lines.push(`*Phone:* ${phone}`);
+  if (dateLabel) lines.push(`*Pickup:* ${dateLabel}${time ? ` @ ${time}` : ''}`);
   lines.push('');
   lines.push(`*Order:*`);
 
@@ -76,7 +76,7 @@ export default function CheckoutForm() {
   const T     = translations[lang].order;
 
   const [name,    setName]    = useState('');
-  const [address, setAddress] = useState('');
+  const [phone,   setPhone]   = useState('');
   const [date,    setDate]    = useState('');
   const [time,    setTime]    = useState('');
   const [note,    setNote]    = useState('');
@@ -94,8 +94,8 @@ export default function CheckoutForm() {
 
   const validate = () => {
     const e: Record<string, string> = {};
-    if (!name.trim())    e.name    = 'Required';
-    if (!address.trim()) e.address = 'Required';
+    if (!name.trim())  e.name  = 'Required';
+    if (!phone.trim()) e.phone = 'Required';
     if (!date)           e.date    = 'Required';
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -105,7 +105,7 @@ export default function CheckoutForm() {
     ev.preventDefault();
     if (!validate()) return;
 
-    const msg = buildWhatsAppMessage(lang, name, address, date, time, note, cart, total);
+    const msg = buildWhatsAppMessage(lang, name, phone, date, time, note, cart, total);
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 
     // Clear cart before navigating so it's clean if user returns
@@ -122,7 +122,7 @@ export default function CheckoutForm() {
         <h2 className="font-display text-2xl font-bold text-chocolate-900 mb-6">{T.step2}</h2>
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
 
-          {/* Name + Address */}
+          {/* Name + Phone */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
               <label className="block text-sm font-semibold text-chocolate-800 mb-1.5">{T.name} *</label>
@@ -134,13 +134,13 @@ export default function CheckoutForm() {
               {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
             </div>
             <div>
-              <label className="block text-sm font-semibold text-chocolate-800 mb-1.5">{T.address} *</label>
+              <label className="block text-sm font-semibold text-chocolate-800 mb-1.5">{T.phone} *</label>
               <input
-                type="text" value={address} onChange={e => setAddress(e.target.value)}
-                placeholder={T.addressPlaceholder}
-                className={`w-full px-4 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-cookie-400 ${errors.address ? 'border-red-400' : 'border-cream-300'}`}
+                type="tel" value={phone} onChange={e => setPhone(e.target.value)}
+                placeholder={T.phonePlaceholder}
+                className={`w-full px-4 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-cookie-400 ${errors.phone ? 'border-red-400' : 'border-cream-300'}`}
               />
-              {errors.address && <p className="text-red-500 text-xs mt-1">{errors.address}</p>}
+              {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
             </div>
           </div>
 
